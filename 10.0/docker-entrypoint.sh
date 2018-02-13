@@ -154,6 +154,12 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			mysql+=( "$MYSQL_DATABASE" )
 		fi
 
+		file_env 'MYSQL_SECONDARY_DATABASE'
+		if [ "$MYSQL_SECONDARY_DATABASE" ]; then
+			echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_SECONDARY_DATABASE\` ;" | "${mysql[@]}"
+			mysql+=( "$MYSQL_SECONDARY_DATABASE" )
+		fi
+
 		file_env 'MYSQL_USER'
 		file_env 'MYSQL_PASSWORD'
 		if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
@@ -161,6 +167,10 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 
 			if [ "$MYSQL_DATABASE" ]; then
 				echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
+			fi
+
+			if [ "$MYSQL_SECONDARY_DATABASE" ]; then
+				echo "GRANT ALL ON \`$MYSQL_SECONDARY_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
 			fi
 
 			echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
