@@ -157,7 +157,6 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		file_env 'MYSQL_SECONDARY_DATABASE'
 		if [ "$MYSQL_SECONDARY_DATABASE" ]; then
 			echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_SECONDARY_DATABASE\` ;" | "${mysql[@]}"
-			mysql+=( "$MYSQL_SECONDARY_DATABASE" )
 		fi
 
 		file_env 'MYSQL_USER'
