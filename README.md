@@ -10,3 +10,25 @@ Similar to `MYSQL_DATABASE`, the `MYSQL_USER` created upon image startup will ha
 This is very useful for our internal development workflow.
 
 See [our Docker Hub page](https://registry.hub.docker.com/cyberduck/mariadb/) for the full readme updated with our changes.
+
+## docker-compose usage:
+
+```yml
+version: '2'
+services:
+    ...
+    db:
+        image: cyberduck/mariadb(:<version-tag>)
+        environment:
+            MYSQL_DATABASE: projectname
+            MYSQL_SECONDARY_DATABASE: test
+            MYSQL_USER: projectname
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - projectname-data:/var/lib/mysql #if you're using volumes to persist storage
+        networks:
+            - my_net #if you're using networks between containers
+        ports:
+            - "33060:3306" #this way you port 33060 can be used to connect from your host using GUI clients like Sequel Pro
+```
